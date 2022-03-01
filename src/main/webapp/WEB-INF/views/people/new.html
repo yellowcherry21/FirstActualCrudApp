@@ -9,6 +9,7 @@
 
     <label for="name">Name</label>
     <input type="text" th:field="*{name}" id="name"/>
+    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</p>
 
     <br/>
 

@@ -1,27 +1,25 @@
 package by.bsu.models;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+@NoArgsConstructor
+@Getter
+@Setter
 public class Person {
     int id;
-    String name;
 
-    public Person() {
-    }
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min = 2, max = 35, message = "Name should be between 1 and 35 characters")
+    String name;
 
     public Person(int id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
