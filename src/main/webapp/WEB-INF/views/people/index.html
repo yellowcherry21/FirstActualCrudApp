@@ -9,13 +9,16 @@
 
 <table border="1">
     <tr>
+        <td>Id</td>
         <td>Name</td>
     </tr>
     <tr th:each="person : ${people}">
         <td>
+            <a th:text="${person.getId()}">PersonId</a>
+        </td>
+        <td>
             <a th:href="@{/people/{id}(id=${person.getId()})}" th:text="${person.getName()}">PersonName</a>
         </td>
-    </tr>
 </table>
 
 <hr/>
