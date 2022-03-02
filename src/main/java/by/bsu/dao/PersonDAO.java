@@ -35,9 +35,10 @@ public class PersonDAO {
         List<Person> people = new ArrayList<>();
 
         try {
-            Statement statement = connection.createStatement();
-            String SQL = "select * from Person";
-            ResultSet resultSet = statement.executeQuery(SQL);
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("SELECT * FROM Person");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()){
                 Person person = new Person();
@@ -52,43 +53,61 @@ public class PersonDAO {
         return people;
     }
 
-    public Person getExactPerson(Integer index){
-        Person person = new Person();
+    public Person getExactPerson(int index){
+        Person person = null;
         try{
-            Statement statement = connection.createStatement();
-            String SQL = "select * from Person where id = " +  index.toString();
-            ResultSet resultSet = statement.executeQuery(SQL);
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("SELECT * FROM Person WHERE id = ?");
 
+            preparedStatement.setInt(1,index);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            person = new Person();
+
+            resultSet.next();
+            person.setId(resultSet.getInt("id"));
             person.setName(resultSet.getString("name"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-//        return people.stream()
-//                .filter(x->x.getId() == index)
-//                .findAny()
-//                .orElse(null);
         return person;
     }
 
     public void create(Person person){
         try {
-            Statement statement = connection.createStatement();
-            String query = "insert into Person values(" + 1 + ", '"+ person.getName() + "')";
-            statement.executeUpdate(query);
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("INSERT INTO Person VALUES(1, ?)");
+
+            preparedStatement.setString(1, person.getName());
+            preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-//        person.setId(++PEOPLE_COUNT);
-//        people.add(person);
     }
 
     public void edit(int id, Person updatedPerson){
-        Person personToUpdate = getExactPerson(id);
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("UPDATE Person SET name=? WHERE id = ?");
 
-        personToUpdate.setName(updatedPerson.getName());
+            preparedStatement.setString(1, updatedPerson.getName());
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void delete(int id){
-//        people.remove(getExactPerson(id));
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("DELETE FROM Person WHERE id = ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
