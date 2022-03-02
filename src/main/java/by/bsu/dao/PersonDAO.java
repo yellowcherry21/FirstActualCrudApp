@@ -52,15 +52,32 @@ public class PersonDAO {
         return people;
     }
 
-    public Person getExactPerson(int index){
+    public Person getExactPerson(Integer index){
+        Person person = new Person();
+        try{
+            Statement statement = connection.createStatement();
+            String SQL = "select * from Person where id = " +  index.toString();
+            ResultSet resultSet = statement.executeQuery(SQL);
+
+            person.setName(resultSet.getString("name"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 //        return people.stream()
 //                .filter(x->x.getId() == index)
 //                .findAny()
 //                .orElse(null);
-        return null;
+        return person;
     }
 
     public void create(Person person){
+        try {
+            Statement statement = connection.createStatement();
+            String query = "insert into Person values(" + 1 + ", '"+ person.getName() + "')";
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 //        person.setId(++PEOPLE_COUNT);
 //        people.add(person);
     }
