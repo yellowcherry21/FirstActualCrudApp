@@ -18,26 +18,26 @@ public class PersonDAO {
     }
 
     public List<Person> getPeople(){
-        return jdbcTemplate.query("SELECT * FROM Person", new PersonMapper());
+        return jdbcTemplate.query("SELECT * FROM \"Person\"", new BeanPropertyRowMapper<>(Person.class));
     }
 
     public Person getExactPerson(int index){
-        return jdbcTemplate.query("SELECT * FROM Person WHERE id = ?",
+        return jdbcTemplate.query("SELECT * FROM \"Person\" WHERE id = ?",
                 new Object[]{index},
                 new BeanPropertyRowMapper<Person>()).stream() .findAny().orElse(null);
     }
 
     public void create(Person person){
-       jdbcTemplate.update("INSERT INTO Person VALUES (1,?)",person.getName());
+       jdbcTemplate.update("INSERT INTO \"Person\" VALUES (1,?)",person.getName());
     }
 
     public void edit(int id, Person updatedPerson){
-        jdbcTemplate.update("UPDATE Person SET name = ? WHERE id = ?",
+        jdbcTemplate.update("UPDATE \"Person\" SET name = ? WHERE id = ?",
                 updatedPerson.getName(),
                 updatedPerson.getId());
     }
 
     public void delete(int id){
-        jdbcTemplate.update("DELETE FROM Person WHERE id = ?", id);
+        jdbcTemplate.update("DELETE FROM \"Person\" WHERE id = ?", id);
     }
 }
