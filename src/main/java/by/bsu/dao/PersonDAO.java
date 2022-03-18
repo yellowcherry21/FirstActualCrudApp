@@ -24,7 +24,7 @@ public class PersonDAO {
     public Person getExactPerson(int index){
         return jdbcTemplate.query("SELECT * FROM \"Person\" WHERE id = ?",
                 new Object[]{index},
-                new BeanPropertyRowMapper<Person>()).stream() .findAny().orElse(null);
+                new BeanPropertyRowMapper<>(Person.class)).stream().findAny().orElse(null);
     }
 
     public void create(Person person){
