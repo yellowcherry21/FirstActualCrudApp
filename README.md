@@ -7,3 +7,6 @@ java 13
 lombok
 jdbc template 
 postgresql
+
+
+it has a simple forntend and it usesjdbc template
